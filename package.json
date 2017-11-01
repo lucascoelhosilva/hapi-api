@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucascoelhosilva/hapi-api.git"
+  },
   "scripts": {
     "test": "lab --verbose --colors --assert code --coverage"
   },
