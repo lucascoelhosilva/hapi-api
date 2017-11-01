@@ -1,0 +1,37 @@
+version: '2'
+services:
+  postgres:
+    networks:
+      default:
+    image: postgres:9.6
+    container_name: postgres-hapi-api
+    mem_limit: 256m
+    ports:
+      - "5432:5432"
+    environment:
+        - DB_USER=dbuser
+        - DB_PASS=dbuser
+        - DB_NAME=slap
+  redis:
+    image: redis
+    container_name: redis-hapi-api
+    ports:
+        - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+  api:
+    build: .
+    mem_limit: 512m
+    environment:
+        - DB_USER=dbuser
+        - DB_PASS=dbuser
+        - DB_NAME=slap
+    links:
+        - redis
+        - postgres
+    ports:
+      - "3000:3000"
+      - "5858:5858"
+    volumes:
+      - ".:/app"
+networks:
+  default:
