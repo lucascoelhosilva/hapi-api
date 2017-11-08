@@ -20,6 +20,7 @@ exports.register = (server, options, next) => {
       }
     },
     jsonEditor: true,
+    grouping: 'tags',
     securityDefinitions: {
       'Bearer': {
         'type': 'apiKey',

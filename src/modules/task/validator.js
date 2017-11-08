@@ -21,15 +21,9 @@ const schema = {
   userId: Joi
     .number()
     .integer()
-    .min(0),
-  fields: Joi.object({
-    fields: Joi
-    .string()
-    .min(1)
-    .max(250)
-    .trim()
-  }).options({ allowUnknown: true })
+    .min(0)
 };
+
 
 function create () {
   return {
@@ -58,7 +52,11 @@ function update () {
 
 function list () {
   return {
-    headers: schema.fields,
+    query: {
+      title: schema
+        .title
+        .optional()
+    }
   };
 }
 

@@ -12,7 +12,7 @@ module.exports = [
     config: {
       description: 'GET user',
       notes: 'Return based on token',
-      tags: ['api', 'admin'],
+      tags: ['api', 'user'],
       auth: {
         scope: ['admin']
       },
@@ -21,15 +21,49 @@ module.exports = [
     }
   },
   {
+    method: 'GET',
+    path: URI + 's',
+    config: {
+      description: 'GET users',
+      notes: 'GET users',
+      tags: ['api', 'user'],
+      plugins: {
+        slap: {
+          rule: 'user'
+        }
+      },
+      auth: false,
+      handler: controller.all,
+      validate: validator.all()
+    }
+  },
+  {
+    method: 'DELETE',
+    path: URI + '/{id}',
+    config: {
+      description: 'DELETE user',
+      notes: 'DELETE user',
+      tags: ['api', 'user'],
+      plugins: {
+        slap: {
+          clear: ['user', 'user-id']
+        }
+      },
+      auth: {
+        scope: ['admin']
+      },
+      handler: controller.destroy,
+      validate: validator.destroy()
+    }
+  },
+  {
     method: 'POST',
     path: URI,
     config: {
       description: 'POST user',
-      notes: 'Save a user',
-      tags: ['api', 'admin'],
-      auth: {
-        scope: ['admin']
-      },
+      notes: 'Create a user',
+      tags: ['api', 'user'],
+      auth: false,
       handler: controller.create,
       validate: validator.create()
     }
@@ -40,8 +74,10 @@ module.exports = [
     config: {
       description: 'POST user logout',
       notes: 'Logout a user',
-      tags: ['api', 'admin'],
-      auth: 'jwt',
+      tags: ['api', 'user'],
+      auth: {
+        scope: ['admin']
+      },
       handler: controller.logout,
       validate: validator.logout()
     }
@@ -52,7 +88,7 @@ module.exports = [
     config: {
       description: 'PUT user',
       notes: 'Update based on token',
-      tags: ['api', 'admin'],
+      tags: ['api', 'user'],
       auth: {
         scope: ['admin']
       },
@@ -66,7 +102,7 @@ module.exports = [
     config: {
       description: 'POST user',
       notes: 'User login to the token generation',
-      tags: ['api', 'admin'],
+      tags: ['api', 'user'],
       auth: false,
       handler: controller.login,
       validate: validator.login()

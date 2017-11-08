@@ -32,7 +32,7 @@ module.exports = (sequelize, DataType) => {
       user: function (userId) {
         return {
           where: {
-            id: userId
+            userId: userId
           }
         };
       }

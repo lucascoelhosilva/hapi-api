@@ -5,6 +5,8 @@ module.exports = {
   create: create,
   update: update,
   read: read,
+  destroy: destroy,
+  all: all,
   login: login,
   logout: logout
 };
@@ -35,8 +37,7 @@ async function read (request, reply) {
     const model = db.models.User;
 
     const options = {
-      where: {id: request.auth.credentials.id},
-      attributes: ['login']
+      where: {id: request.auth.credentials.id}
     };
 
     const value = await model.findOne(options);
@@ -45,6 +46,31 @@ async function read (request, reply) {
     }
 
     return reply(value);
+  } catch (err) {
+    return reply.badImplementationCustom(err);
+  }
+}
+
+async function all (request, reply) {
+  try {
+    const cache = await request.getCache();
+    
+    if (cache) {
+      return reply(cache);
+    }
+
+    const db = request.getDb('slap');
+    const model = db.models.User;
+
+    const values = await model.findAll();
+    
+    if (!values) {
+      return reply.notFound();
+    }
+
+    request.addCache(values);    
+
+    return reply(values);
   } catch (err) {
     return reply.badImplementationCustom(err);
   }
@@ -104,6 +130,30 @@ async function logout (request, reply) {
         throw err;
       }
       return reply();
+    });
+  } catch (err) {
+    return reply.badImplementationCustom(err);
+  }
+}
+
+async function destroy (request, reply) {
+  try {
+    const db = request.getDb('slap');
+    const model = db.models.User;
+    const id = request.params.id;
+    const credentials = request.auth.credentials.id;
+
+    const value = await model.scope({method: ['user', credentials]}).findOne({where: {id: id}});
+    if (!value) {
+      return reply.notFound();
+    }
+
+    request.clearCache();
+
+    await value.destroy();
+
+    return reply({
+      id: value.id
     });
   } catch (err) {
     return reply.badImplementationCustom(err);

@@ -50,7 +50,6 @@ async function update (request, reply) {
 
 async function show (request, reply) {
   try {
-    const id = request.params.id;
     const cache = await request.getCache(id);
 
     if (cache) {
@@ -58,8 +57,11 @@ async function show (request, reply) {
     }
 
     const db = request.getDb('slap');
-
-    const value = await db.models.Task.findOne({where: {id: id}});
+    const model = db.models.Task;
+    const id = request.params.id;
+    
+    const value = await model.scope({method: ['user', credentials]}).findOne({where: {id: id}});
+    
     if (!value) {
       return reply.notFound();
     }
@@ -98,17 +100,23 @@ async function destroy (request, reply) {
 
 async function list (request, reply) {
   try {
+    const cache = await request.getCache();
+    
+    if (cache) {
+      return reply(cache);
+    }
+
     const db = request.getDb('slap');
     const model = db.models.Task;
     const credentials = request.auth.credentials.id;
+
 
     const values = await model.scope({method: ['user', credentials]}).findAndCountAll();
 
     request.addCache(values);
 
-    return reply(values).header('allowing-fields');
+    return reply(values);
   } catch (err) {
-    console.log(err);
     return reply.badImplementationCustom(err);
   }
-}
+};

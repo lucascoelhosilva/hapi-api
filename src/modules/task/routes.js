@@ -12,21 +12,26 @@ module.exports = [
     config: {
       description: 'GET task',
       notes: 'GET task',
-      tags: ['api', 'admin'],
+      tags: ['api', 'task'],
+      plugins: {
+        slap: {
+          rule: 'task'
+        }
+      },
       auth: {
         scope: ['admin']
       },
       handler: controller.list,
       validate: validators.list()
     }
-  },
+  }, 
   {
     method: 'DELETE',
     path: URI + '/{id}',
     config: {
       description: 'DELETE task',
       notes: 'DELETE task',
-      tags: ['api', 'admin'],
+      tags: ['api', 'task'],
       plugins: {
         slap: {
           clear: ['task', 'task-id']
@@ -45,7 +50,7 @@ module.exports = [
     config: {
       description: 'PUT task',
       notes: 'PUT task',
-      tags: ['api', 'admin'],
+      tags: ['api', 'task'],
       plugins: {
         slap: {
           clear: ['task', 'task-id']
@@ -64,7 +69,7 @@ module.exports = [
     config: {
       description: 'POST task',
       notes: 'POST task',
-      tags: ['api', 'admin'],
+      tags: ['api', 'task'],
       plugins: {
         slap: {
           clear: ['task', 'task-id']
@@ -83,10 +88,11 @@ module.exports = [
     config: {
       description: 'View task',
       notes: 'View task',
-      tags: ['api', 'admin'],
+      tags: ['api', 'task'],
       plugins: {
         slap: {
-          clear: ['task', 'task-id']
+          rule: 'task-id',
+          expireIn: 60
         }
       },
       auth: {

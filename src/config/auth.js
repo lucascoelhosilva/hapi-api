@@ -31,7 +31,6 @@ exports.register = (server, options, next) => {
     const token = request.headers.authorization.replace('Bearer ', '');
 
     client.get(token, (err, res) => {
-      console.log(res);
       if(err) {
         console.log(err);
       }

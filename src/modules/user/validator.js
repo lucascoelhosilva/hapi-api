@@ -5,7 +5,9 @@ module.exports = {
   update: update,
   login: login,
   logout: logout,
-  read: read
+  read: read,
+  destroy: destroy,
+  all: all
 };
 
 const schema = {
@@ -50,6 +52,9 @@ function login () {
 function create () {
   return {
     payload: Joi.object({
+      name: schema
+        .name
+        .required(),
       email: schema
         .email
         .required(),
@@ -83,4 +88,22 @@ function read () {
   };
 }
 
+function destroy () {
+  return {
+    params: {
+      id: schema
+        .id
+        .required()
+    }
+  };
+}
 
+function all () {
+  return {
+    query: {
+      email: schema
+        .email
+        .optional()
+    }
+  };
+}
