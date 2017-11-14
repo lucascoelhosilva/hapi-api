@@ -24,9 +24,9 @@ exports.register = (server, options, next) => {
     });
 
     return next();
-  }
+  };
 
-  // bring your own validation function
+  // function validate
   var validate = function (decoded, request, cb) {
     const token = request.headers.authorization.replace('Bearer ', '');
 

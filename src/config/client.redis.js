@@ -9,7 +9,7 @@ const config = {
 const client = redis.createClient(config.port, config.host);
 
 client.on('connect', () => {
-  console.log('===> connected redis');
+  console.log('===> redis');
 });
 
 module.exports = client;
